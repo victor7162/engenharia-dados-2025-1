@@ -1,0 +1,46 @@
+services:
+  app: # Nome do nosso servico de aplicacao Python
+    build: ./app # Instrui o Compose a construir a imagem a partir do Dockerfile em ./app
+    depends_on:
+      - dbpg # Garante que o servico 'db' seja iniciado antes do 'app'
+    environment: # Variaveis de ambiente para o container 'app'
+      - DB_HOST=dbpg # O script.py usara 'db' como hostname para o PostgreSQL
+      - POSTGRES_DB=${POSTGRES_DB:-mydatabase} # Usa valor do .env ou default
+      - POSTGRES_USER=${POSTGRES_USER:-user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+    networks:
+      - app-network
+
+  dbpg: # Nome do nosso servico de banco de dados PostgreSQL
+    image: postgres:13-alpine # Usa uma imagem oficial do PostgreSQL (versao Alpine e menor)
+    environment: # Variaveis de ambiente para configurar o PostgreSQL
+      POSTGRES_DB: ${POSTGRES_DB:-mydatabase}
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persiste os dados do PostgreSQL
+    ports:
+      - "5432:5432" # Mapeia a porta 5432 do container para a 5432 do host (opcional para este exercicio, mas util para acesso externo)
+    networks:
+      - app-network
+
+  dbt:
+    restart: always
+    build: ./dbt # Instrucoes para construir a imagem do dbt
+    depends_on:
+      - dbpg # Garante que o servico 'db' seja iniciado antes do 'dbt'
+    environment: # Variaveis de ambiente para o dbt
+      - DB_HOST=dbpg
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB:-mydatabase}
+      - DB_USER=${POSTGRES_USER:-user}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-password}
+    networks:
+      - app-network
+
+volumes:
+  postgres_data: # Define um volume nomeado para persistencia dos dados do DB
+
+networks:
+  app-network: # Define uma rede customizada do tipo bridge
+    driver: bridge 
