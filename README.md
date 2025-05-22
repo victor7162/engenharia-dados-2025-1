@@ -1,6 +1,6 @@
 # engenharia-dados-2025-1
 
-# Comtainers
+# Containers
 ## dbt_compose
 - app
     - postgresql
