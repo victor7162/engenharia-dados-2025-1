@@ -1,6 +1,31 @@
 
 version: 2
 
+sources:
+  - name: exemplo_vendas
+    description: "A source table for dbt"
+    tables:
+      - name: exemplo_vendas 
+        description: "A source table for dbt from a csv file"
+        columns:
+          - name: id
+            description: "The primary key for this table"
+            data_tests:
+              - unique
+              - not_null
+
+  - name: my_second_source
+    description: "Another source table for dbt"
+    tables:
+      - name: my_second_source_table
+        description: "Another source table for dbt"
+        columns:
+          - name: id
+            description: "The primary key for this table"
+            data_tests:
+              - unique
+              - not_null
+
 models:
   - name: my_first_dbt_model
     description: "A starter dbt model"

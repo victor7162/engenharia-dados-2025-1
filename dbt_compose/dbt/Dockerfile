@@ -35,8 +35,12 @@ COPY projeto_dbt .
 
 COPY profiles.yml .
 
-COPY exemplo_vendas.csv /projeto_dbt/seeds/
+# COPY exemplo_vendas.csv /projeto_dbt/seeds/
+
+EXPOSE 8080 
+
+# Expose port 8080 for dbt server
 
 # RUN dbt seed --profiles-dir .
 
-CMD dbt deps && dbt build --profiles-dir . && sleep infinity
+CMD dbt deps && dbt build --profiles-dir . && dbt serve docs && sleep infinity
