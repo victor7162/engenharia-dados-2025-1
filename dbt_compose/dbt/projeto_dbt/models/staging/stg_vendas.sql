@@ -1,9 +1,6 @@
-            sql
-            -- models/staging/stg_vendas.sql
             with source_data as (
                 -- Referencia a tabela de origem definida em bronze_sources.yml
-                -- select * from {{ ('raw_data_source', 'exemplo_vendas_raw') }}
-                select * from {{ref('exemplo_vendas') }}
+                select * from {{ source('raw_data_source', 'exemplo_vendas_raw') }}
                 -- Se voce nao definiu a source, e o seed criou a tabela 'exemplo_vendas_raw'
                 -- no schema padrao, voce poderia usar {{ ref('exemplo_vendas_raw') }}
                 -- mas usar 'source' e a melhor pratica para dados brutos.
@@ -35,4 +32,3 @@
                 cast(ID_Cliente as varchar) as id_cliente,
                 trim(lower(Cidade_Cliente)) as cidade_cliente
             from source_data
-            

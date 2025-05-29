@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: raw_data_source # Um nome logico para o grupo de fontes
+    description: "Fonte de dados brutos carregados via seed ou ingestao externa."
+    # Opcional: especifique o schema e database se nao for o padrao do seu target
+    # database: meu_banco_dbt # Para DuckDB, o path e o database
+    # schema: main # DuckDB usa 'main' como schema padrao
+    tables:
+      - name: exemplo_vendas_raw # O nome da tabela como foi criada pelo dbt seed
+        description: "Tabela de vendas brutas do arquivo CSV."
+        # Voce pode adicionar testes ou descricoes de colunas aqui tambem
+        columns:
+          - name: ID_Produto
+            description: "ID do produto da venda."
