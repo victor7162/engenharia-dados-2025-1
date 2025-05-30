@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: raw_data
     description: "Fonte de dados brutos de vendas."
-    schema: seeds # This usually refers to the schema where seeds are loaded. Adjust if your dbt setup loads seeds into a different schema.
+    schema: db_dbt  # This usually refers to the schema where seeds are loaded. Adjust if your dbt setup loads seeds into a different schema.
     tables:
       - name: exemplo_vendas_raw
         description: "Tabela de vendas brutas importada do CSV."

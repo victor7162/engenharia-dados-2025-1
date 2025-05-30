@@ -30,11 +30,12 @@ services:
     depends_on:
       - dbpg # Garante que o servico 'db' seja iniciado antes do 'dbt'
     environment: # Variaveis de ambiente para o dbt
-      - DB_HOST=dbpg
-      - DB_PORT=5432
-      - DB_NAME=${POSTGRES_DB:-mydatabase}
-      - DB_USER=${POSTGRES_USER:-user}
-      - DB_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - DB_HOST=${DB_HOST:-mydatabase}
+      - DB_PORT=${DB_PORT:-mydatabase}
+      - DB_NAME=${DB_NAME:-mydatabase}
+      - DB_USER=${DB_USER:-user}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_SCHEMA=${DB_SCHEMA:-public} # Esquema onde o dbt ira criar as tabelas
     ports: 
       - "8080:8080" # Mapeia a porta 8080 do container para a 8080 do host (opcional, se o dbt tiver um servidor web)
     networks:
