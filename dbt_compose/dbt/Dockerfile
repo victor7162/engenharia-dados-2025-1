@@ -44,4 +44,4 @@ EXPOSE 8080
 # RUN dbt seed --profiles-dir .
 
 # CMD dbt seed && dbt deps && dbt build --profiles-dir . && dbt serve docs && dbt run --profiles-dir .
-CMD dbt deps && dbt build --profiles-dir . && sleep infinity
+# CMD dbt deps && dbt build --profiles-dir . && sleep infinity
