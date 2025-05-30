@@ -1,12 +1,13 @@
-projeto_dbt: # Este nome deve corresponder ao 'profile' em dbt_project.yml
+projeto_dbt:
   target: dev
   outputs:
     dev:
       type: postgres
-      threads: 1
-      host: dbpg # Nome do servico do banco de dados no docker-compose
-      port: 5432
-      user: postgres
-      pass: senha1234
-      dbname: db_dbt
-      schema: db_dbt # O schema onde o dbt criara as tabelas
+      host: "{{ env_var('DB_HOST') }}"
+      user: "{{ env_var('DB_USER') }}"
+      password: "{{ env_var('DB_PASSWORD') }}"
+      port: "{{ env_var('DB_PORT') | int }}"
+      dbname: "{{ env_var('DB_NAME') }}"
+      schema: "{{ env_var('DB_SCHEMA', 'public') }}"
+      threads: 4
+      keepalives_idle: 0
