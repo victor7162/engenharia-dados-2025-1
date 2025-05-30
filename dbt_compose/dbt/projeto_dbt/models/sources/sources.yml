@@ -1,0 +1,40 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Fonte de dados brutos de vendas."
+    schema: seeds # This usually refers to the schema where seeds are loaded. Adjust if your dbt setup loads seeds into a different schema.
+    tables:
+      - name: exemplo_vendas_raw
+        description: "Tabela de vendas brutas importada do CSV."
+        # Assuming the CSV name 'exemplo_vendas_raw.csv' becomes table 'exemplo_vendas_raw' when seeded.
+        # dbt typically uses the file name (without extension) as the table identifier for seeds.
+        identifier: exemplo_vendas_raw
+        columns:
+          - name: id_pedido
+            description: "Identificador único do pedido."
+            tests:
+              - unique
+              - not_null
+          - name: id_cliente
+            description: "Identificador único do cliente."
+            tests:
+              - not_null
+          - name: data_venda
+            description: "Data em que a venda foi realizada."
+            tests:
+              - not_null
+          - name: produto
+            description: "Nome do produto vendido."
+          - name: quantidade
+            description: "Quantidade do produto vendido."
+            tests:
+              - not_null
+          - name: valor_unitario # Added based on common sales data
+            description: "Valor unitário do produto."
+            tests:
+              - not_null
+          - name: valor_total
+            description: "Valor total da venda."
+            tests:
+              - not_null
