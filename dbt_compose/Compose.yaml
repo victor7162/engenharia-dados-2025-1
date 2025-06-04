@@ -4,19 +4,19 @@ services:
     depends_on:
       - dbpg # Garante que o servico 'db' seja iniciado antes do 'app'
     environment: # Variaveis de ambiente para o container 'app'
-      - DB_HOST=dbpg # O script.py usara 'db' como hostname para o PostgreSQL
-      - POSTGRES_DB=${POSTGRES_DB:-mydatabase} # Usa valor do .env ou default
-      - POSTGRES_USER=${POSTGRES_USER:-user}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - DB_HOST=${DB_HOST:-dbpg} # O script.py usara 'db' como hostname para o PostgreSQL
+      - DB_NAME=${DB_NAME:-mydatabase} # Usa valor do .env ou default
+      - DB_USER=${DB_USER:-user}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
     networks:
       - app-network
 
   dbpg: # Nome do nosso servico de banco de dados PostgreSQL
     image: postgres:13-alpine # Usa uma imagem oficial do PostgreSQL (versao Alpine e menor)
     environment: # Variaveis de ambiente para configurar o PostgreSQL
-      POSTGRES_DB: ${POSTGRES_DB:-mydatabase}
-      POSTGRES_USER: ${POSTGRES_USER:-user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-mydatabase}
+      POSTGRES_USER: ${DB_USER:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
     volumes:
       - postgres_data:/var/lib/postgresql/data # Persiste os dados do PostgreSQL
     ports:
@@ -38,6 +38,28 @@ services:
       - DB_SCHEMA=${DB_SCHEMA:-public} # Esquema onde o dbt ira criar as tabelas
     ports: 
       - "8080:8080" # Mapeia a porta 8080 do container para a 8080 do host (opcional, se o dbt tiver um servidor web)
+    networks:
+      - app-network
+
+
+  dbt-spark3-thrift:
+    build:
+      context: ./spark
+      dockerfile: spark.Dockerfile
+    ports:
+      - "10000:10000"
+      - "4040:4040"
+    depends_on:
+      - dbpg
+    command: >
+      --class org.apache.spark.sql.hive.thriftserver.HiveThriftServer2
+      --name Thrift JDBC/ODBC Server
+    volumes:
+      - ./.spark-warehouse/:/spark-warehouse/
+      - ./docker/hive-site.xml:/usr/spark/conf/hive-site.xml
+      - ./docker/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
+    environment:
+      - WAIT_FOR=dbpg:5432      
     networks:
       - app-network
 

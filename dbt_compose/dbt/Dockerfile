@@ -25,17 +25,12 @@ RUN python -m pip install --upgrade "pip==24.0" "setuptools==69.2.0" "wheel==0.4
 
 ARG commit_ref=main
 
-RUN python -m pip install --no-cache-dir dbt-core
-
-RUN python -m pip install --no-cache-dir dbt-postgres
-
 WORKDIR /projeto_dbt
 
-COPY projeto_dbt .
+COPY ./projeto_dbt .
 
-COPY profiles.yml .
-
-# COPY exemplo_vendas.csv /projeto_dbt/seeds/
+# Install dbt and dbt-postgres
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8080 
 
@@ -43,4 +38,4 @@ EXPOSE 8080
 
 # RUN dbt seed --profiles-dir .
 
-CMD ["sh", "-c", "dbt seed --profiles-dir . --full-refresh && dbt deps --profiles-dir . && dbt build --profiles-dir . && dbt docs serve --profiles-dir . --port 8080 --host 0.0.0.0 --no-browser"]
+CMD ["sh", "-c", "dbt deps  --profiles-dir . && dbt seed --profiles-dir . --full-refresh && --profiles-dir . && dbt build --profiles-dir . && dbt docs serve --profiles-dir . --port 8080 --host 0.0.0.0 --no-browser"]

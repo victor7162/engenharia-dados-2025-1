@@ -1,10 +1,20 @@
-Welcome to your new dbt project!
+## Fundamentos do dbt
 
-### Using the starter project
+### Cinco tópicos/definições importantes
+- sources
+- models
+- tests
+- docs
+- deployment
 
-Try running the following commands:
-- dbt run
-- dbt test
+Itens básicos do desenvolvimento de um workflow
+
+
+## dbt & Analytics Engineering
+![alt text](../../../aulas/image.png)
+
+
+
 
 
 ### Resources:

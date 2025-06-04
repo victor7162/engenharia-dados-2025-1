@@ -6,9 +6,9 @@ import time
 
 def connect_to_db():
     db_host = os.getenv("DB_HOST", "dbpg") # 'db' e o nome do servico PostgreSQL no docker-compose
-    db_name = os.getenv("POSTGRES_DB", "mydatabase")
-    db_user = os.getenv("POSTGRES_USER", "user")
-    db_password = os.getenv("POSTGRES_PASSWORD", "password")
+    db_name = os.getenv("DB_NAME", "mydatabase")
+    db_user = os.getenv("DB_USER", "user")
+    db_password = os.getenv("DB_PASSWORD", "password")
     
     conn_string = f"host='{db_host}' dbname='{db_name}' user='{db_user}' password='{db_password}'"
     
