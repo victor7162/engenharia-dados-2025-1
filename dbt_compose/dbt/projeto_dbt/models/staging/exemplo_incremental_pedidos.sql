@@ -1,8 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='id',
-        incremental_strategy='merge',
+        unique_key='id_pedido',
         file_format='delta',
         schema='staging',
         alias='exemplo_incremental_pedidos'
@@ -23,7 +22,7 @@ renamed as (
         user_id as id_cliente,
         order_date as data_pedido,
         status,
-        current_timestamp() AS data_atualizacao
+        current_timestamp AS data_atualizacao
 
     from source
 

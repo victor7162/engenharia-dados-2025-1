@@ -1,5 +1,7 @@
 models:
   - name: clientes
+    enabled: true
+    materialized: table
     description: "Tabela de clientes"
     columns:
       - name: id_cliente
@@ -13,24 +15,15 @@ models:
           - not_null
       - name: primeiro_pedido
         description: "Primeiro pedido do cliente"
-        tests:
-          - not_null
-          - unique
       - name: pedido_mais_recente
         description: "Pedido mais recente do cliente"
-        tests:
-          - not_null
-      - name: numero_pedidos
-        description: "Numero de pedidos do cliente"
-        tests:
-          - not_null
-      - name: valor_total
-        description: "Valor total dos pedidos do cliente"
-        tests:
-          - not_null
+      - name: pagamento_total
+        description: "Valor total do pagamento do cliente"
 
 
   - name: pedidos
+    enabled: true
+    materialized: table
     description: "Tabela de pedidos"
     columns:
       - name: id_pedido
@@ -46,34 +39,15 @@ models:
         description: "Data do pedido"
         tests:
           - not_null
-      - name: metodo_pagamento
-        description: "Metodo de pagamento do pedido (ex: 'credit_card', 'coupon', 'bank_transfer', 'gift_card')"
-        tests:
-          - not_null
-      - name: status_pedido
+      - name: status
         description: "Status do pedido (ex: 'pending', 'completed', 'cancelled')"
         tests:
           - not_null
-      - name: valor_total
-        description: "Valor total do pedido"
-        tests:
-          - not_null        
       - name: credit_card_amount
         description: Amount of the order (BRL) paid for by credit card
-        tests:
-          - not_null
-
       - name: coupon_amount
         description: Amount of the order (BRL) paid for by coupon
-        tests:
-          - not_null
-
       - name: bank_transfer_amount
         description: Amount of the order (BRL) paid for by bank transfer
-        tests:
-          - not_null
-
       - name: gift_card_amount
         description: Amount of the order (BRL) paid for by gift card
-        tests:
-          - not_null

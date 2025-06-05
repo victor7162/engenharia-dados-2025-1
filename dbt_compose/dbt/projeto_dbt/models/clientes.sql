@@ -21,8 +21,7 @@ pedidos_clientes as (
         select
         id_cliente,
         min(data_pedido) as primeiro_pedido,
-        max(data_pedido) as pedido_mais_recente,
-        count(id_pedido) as nummero_de_pedidos
+        max(data_pedido) as pedido_mais_recente
     from pedidos
 
     group by id_cliente
@@ -51,7 +50,6 @@ final as (
         clientes.nome_completo,
         pedidos_clientes.primeiro_pedido,
         pedidos_clientes.pedido_mais_recente,
-        pedidos_clientes.nummero_de_pedidos,
         pagamentos_clientes.pagamento_total
     from clientes
 

@@ -1,8 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='id',
-        incremental_strategy='merge',
+        unique_key='id_pagamento',
         file_format='delta',
         schema='staging',
         alias='exemplo_incremental_pagamentos'
@@ -16,7 +15,7 @@ with source as (
         payment_method AS metodo_pagamento,
         -- amount está armazenado em centavos, convertendo para reais.
         amount / 100 AS valor_pagamento,
-        current_timestamp() AS data_atualizacao
+        current_timestamp AS data_atualizacao
     from {{ ref('raw_pagamentos') }}
 ),
 

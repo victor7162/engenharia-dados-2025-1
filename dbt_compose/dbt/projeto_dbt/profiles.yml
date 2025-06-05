@@ -9,5 +9,5 @@ projeto_dbt:
       port: "{{ env_var('DB_PORT') | int }}"
       dbname: "{{ env_var('DB_NAME') }}"
       schema: "{{ env_var('DB_SCHEMA') }}"
-      threads: 4
+      threads: 1
       keepalives_idle: 0

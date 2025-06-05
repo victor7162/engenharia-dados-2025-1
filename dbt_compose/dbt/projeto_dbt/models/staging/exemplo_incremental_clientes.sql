@@ -1,8 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='id',
-        incremental_strategy='merge',
+        unique_key='id_cliente',
         file_format='delta',
         schema='staging',
         alias='exemplo_incremental_clientes'
@@ -13,7 +12,7 @@ with source as (
     select 
     id AS id_cliente,
     concat(first_name, ' ', last_name) AS nome_completo,
-    current_timestamp() AS data_atualizacao
+    current_timestamp AS data_atualizacao
     from {{ ref('raw_clientes') }}
 ),
 

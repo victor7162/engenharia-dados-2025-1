@@ -49,7 +49,7 @@ final as (
 
 
     left join pagamentos_pedidos
-        on pedidos.order_id = pagamentos_pedidos.order_id
+        on pedidos.id_pedido = pagamentos_pedidos.id_pedido
 
 )
 

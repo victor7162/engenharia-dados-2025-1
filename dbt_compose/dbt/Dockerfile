@@ -1,6 +1,6 @@
 ARG py_version=3.11.2
 
-FROM python:$py_version-slim-bullseye as base
+FROM python:$py_version-slim-bullseye AS base
 
 RUN apt-get update \
   && apt-get dist-upgrade -y \
@@ -38,4 +38,5 @@ EXPOSE 8080
 
 # RUN dbt seed --profiles-dir .
 
-CMD ["sh", "-c", "dbt deps && dbt seed --profiles-dir . --full-refresh && --profiles-dir . && dbt build --profiles-dir . && dbt docs serve --profiles-dir . --port 8080 --host 0.0.0.0 --no-browser"]
+# CMD ["sh", "-c", "dbt deps && dbt seed --profiles-dir . --full-refresh && --profiles-dir . && dbt build --profiles-dir . && dbt docs serve --profiles-dir . --port 8080 --host 0.0.0.0 --no-browser && dbt run"]
+CMD ["sh", "-c", "dbt deps && dbt seed && dbt build --profiles-dir . && dbt run --full-refresh --profiles-dir . && dbt docs generate --profiles-dir . && dbt docs serve --profiles-dir . --port 8080 --host 0.0.0.0"]
