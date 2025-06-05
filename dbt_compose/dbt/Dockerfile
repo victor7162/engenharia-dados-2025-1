@@ -38,4 +38,4 @@ EXPOSE 8080
 
 # RUN dbt seed --profiles-dir .
 
-CMD ["sh", "-c", "dbt deps  --profiles-dir . && dbt seed --profiles-dir . --full-refresh && --profiles-dir . && dbt build --profiles-dir . && dbt docs serve --profiles-dir . --port 8080 --host 0.0.0.0 --no-browser"]
+CMD ["sh", "-c", "dbt deps && dbt seed --profiles-dir . --full-refresh && --profiles-dir . && dbt build --profiles-dir . && dbt docs serve --profiles-dir . --port 8080 --host 0.0.0.0 --no-browser"]

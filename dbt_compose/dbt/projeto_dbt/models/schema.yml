@@ -1,0 +1,79 @@
+models:
+  - name: clientes
+    description: "Tabela de clientes"
+    columns:
+      - name: id_cliente
+        description: "ID do cliente"
+        tests:
+          - unique
+          - not_null
+      - name: nome_completo
+        description: "Nome completo do cliente"
+        tests:
+          - not_null
+      - name: primeiro_pedido
+        description: "Primeiro pedido do cliente"
+        tests:
+          - not_null
+          - unique
+      - name: pedido_mais_recente
+        description: "Pedido mais recente do cliente"
+        tests:
+          - not_null
+      - name: numero_pedidos
+        description: "Numero de pedidos do cliente"
+        tests:
+          - not_null
+      - name: valor_total
+        description: "Valor total dos pedidos do cliente"
+        tests:
+          - not_null
+
+
+  - name: pedidos
+    description: "Tabela de pedidos"
+    columns:
+      - name: id_pedido
+        description: "ID do pedido"
+        tests:
+          - unique
+          - not_null
+      - name: id_cliente
+        description: "ID do cliente que fez o pedido"
+        tests:
+          - not_null
+      - name: data_pedido
+        description: "Data do pedido"
+        tests:
+          - not_null
+      - name: metodo_pagamento
+        description: "Metodo de pagamento do pedido (ex: 'credit_card', 'coupon', 'bank_transfer', 'gift_card')"
+        tests:
+          - not_null
+      - name: status_pedido
+        description: "Status do pedido (ex: 'pending', 'completed', 'cancelled')"
+        tests:
+          - not_null
+      - name: valor_total
+        description: "Valor total do pedido"
+        tests:
+          - not_null        
+      - name: credit_card_amount
+        description: Amount of the order (BRL) paid for by credit card
+        tests:
+          - not_null
+
+      - name: coupon_amount
+        description: Amount of the order (BRL) paid for by coupon
+        tests:
+          - not_null
+
+      - name: bank_transfer_amount
+        description: Amount of the order (BRL) paid for by bank transfer
+        tests:
+          - not_null
+
+      - name: gift_card_amount
+        description: Amount of the order (BRL) paid for by gift card
+        tests:
+          - not_null
