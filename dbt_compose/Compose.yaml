@@ -1,15 +1,4 @@
 services:
-  app: # Nome do nosso servico de aplicacao Python
-    build: ./app # Instrui o Compose a construir a imagem a partir do Dockerfile em ./app
-    depends_on:
-      - dbpg # Garante que o servico 'db' seja iniciado antes do 'app'
-    environment: # Variaveis de ambiente para o container 'app'
-      - DB_HOST=${DB_HOST:-dbpg} # O script.py usara 'db' como hostname para o PostgreSQL
-      - DB_NAME=${DB_NAME:-mydatabase} # Usa valor do .env ou default
-      - DB_USER=${DB_USER:-user}
-      - DB_PASSWORD=${DB_PASSWORD:-password}
-    networks:
-      - app-network
 
   dbpg: # Nome do nosso servico de banco de dados PostgreSQL
     image: postgres:13-alpine # Usa uma imagem oficial do PostgreSQL (versao Alpine e menor)
@@ -41,27 +30,6 @@ services:
     networks:
       - app-network
 
-
-  dbt-spark3-thrift:
-    build:
-      context: ./spark
-      dockerfile: spark.Dockerfile
-    ports:
-      - "10000:10000"
-      - "4040:4040"
-    depends_on:
-      - dbpg
-    command: >
-      --class org.apache.spark.sql.hive.thriftserver.HiveThriftServer2
-      --name Thrift JDBC/ODBC Server
-    volumes:
-      - ./.spark-warehouse/:/spark-warehouse/
-      - ./docker/hive-site.xml:/usr/spark/conf/hive-site.xml
-      - ./docker/spark-defaults.conf:/usr/spark/conf/spark-defaults.conf
-    environment:
-      - WAIT_FOR=dbpg:5432      
-    networks:
-      - app-network
 
 volumes:
   postgres_data: # Define um volume nomeado para persistencia dos dados do DB
