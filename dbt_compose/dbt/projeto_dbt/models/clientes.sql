@@ -60,4 +60,4 @@ final as (
 
 )
 
-select * from final
+select * from final where primeiro_pedido is not null

@@ -1,8 +1,5 @@
 {{
     config(
-        materialized='incremental',
-        unique_key='id_cliente',
-        file_format='delta',
         schema='staging',
         alias='exemplo_incremental_clientes'
     )
