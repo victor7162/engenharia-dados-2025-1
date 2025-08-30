@@ -1,39 +1,47 @@
+
+
 services:
-
-  dbpg: # Nome do nosso servico de banco de dados PostgreSQL
-    image: postgres:13-alpine # Usa uma imagem oficial do PostgreSQL (versao Alpine e menor)
-    environment: # Variaveis de ambiente para configurar o PostgreSQL
-      POSTGRES_DB: ${DB_NAME:-mydatabase}
-      POSTGRES_USER: ${DB_USER:-user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data # Persiste os dados do PostgreSQL
+  dbpg:
+    image: postgres:13.0-alpine
+    container_name: dbpg
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     ports:
-      - "5432:5432" # Mapeia a porta 5432 do container para a 5432 do host (opcional para este exercicio, mas util para acesso externo)
+      - "5432:5432"
     networks:
       - app-network
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
+ 
   dbt:
-    # restart: always
-    build: ./dbt # Instrucoes para construir a imagem do dbt
-    depends_on:
-      - dbpg # Garante que o servico 'db' seja iniciado antes do 'dbt'
-    environment: # Variaveis de ambiente para o dbt
-      - DB_HOST=${DB_HOST:-mydatabase}
-      - DB_PORT=${DB_PORT:-mydatabase}
-      - DB_NAME=${DB_NAME:-mydatabase}
-      - DB_USER=${DB_USER:-user}
-      - DB_PASSWORD=${DB_PASSWORD:-password}
-      - DB_SCHEMA=${DB_SCHEMA:-public} # Esquema onde o dbt ira criar as tabelas
-    ports: 
-      - "8080:8080" # Mapeia a porta 8080 do container para a 8080 do host (opcional, se o dbt tiver um servidor web)
+    container_name: dbt
+    environment:
+      - DB_HOST=dbpg
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_NAME=postgres
+      - DB_PORT=5432
+      - DB_SCHEMA=public
+    build:
+      context: .
+      dockerfile: dbt/Dockerfile
+    volumes:
+      - ./dbt/projeto_dbt:/usr/app/dbt_project
     networks:
       - app-network
-
-
-volumes:
-  postgres_data: # Define um volume nomeado para persistencia dos dados do DB
+    depends_on:
+      dbpg:
+        condition: service_healthy
 
 networks:
-  app-network: # Define uma rede customizada do tipo bridge
-    driver: bridge 
+  app-network:
+    driver: bridge
